@@ -1,4 +1,5 @@
 // 实现对axios封装
+import store from '@/store'
 import axios from 'axios'
 import { Message } from 'element-ui'
 
@@ -19,6 +20,16 @@ service.interceptors.response.use(response => {
   }
 }, error => {
   Message.error(error.message)
+  return Promise.reject(error)
+})
+
+service.interceptors.request.use(config => {
+  // console.log(store.getters.token)
+  if (store.getters.token) {
+    config.headers['Authorization'] = `Bearer ${store.getters.token}`
+  }
+  return config
+}, error => {
   return Promise.reject(error)
 })
 export default service

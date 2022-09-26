@@ -36,7 +36,6 @@
 </template>
 <script>
 import { validPhone } from '@/utils/validate'
-
 export default {
   name: 'Login',
   data() {
@@ -66,6 +65,7 @@ export default {
       loading: false
     }
   },
+
   methods: {
     showPwd() {
       this.passwordType === 'password' ? this.passwordType = '' : this.passwordType = 'password'
