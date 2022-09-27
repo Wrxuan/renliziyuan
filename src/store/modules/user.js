@@ -4,7 +4,8 @@ export default {
   namespaced: true,
   state: {
     token: null,
-    userInfo: {}
+    userInfo: {},
+    hrsaasTime: 0
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -15,6 +16,12 @@ export default {
     },
     RMOVE_USER_INFO(state) {
       state.userInfo = {}
+    },
+    RMOVE_SET_TOKEN(state) {
+      state.token = null
+    },
+    SET_HRSAAS_TIME(state, hrsaasTime) {
+      state.hrsaasTime = hrsaasTime
     }
   },
   actions: {
@@ -22,6 +29,7 @@ export default {
       const data = await login(loginData)
       // console.log(data)
       commit('SET_TOKEN', data)
+      commit('SET_HRSAAS_TIME', new Date().getTime())
     },
     async getUserInfo({ commit }) {
       const res = await getUserInfo()
@@ -30,10 +38,13 @@ export default {
       const result = { ...res, ...res1 }
       console.log(result)
       commit('SET_USER_INFO', result)
-      // console.log(res)
       // 深拷贝解决问题
       return JSON.parse(JSON.stringify(result))
-      // console.log(JSON.parse(JSON.stringify(res)))
+    },
+    logout({ commit }) {
+      // 清除本地的token和userInfo 注：在本地清除的时候还要注意缓存是否清除
+      commit('RMOVE_USER_INFO')
+      commit('RMOVE_SET_TOKEN')
     }
   }
 }
